@@ -1,13 +1,25 @@
+const taskInput = document.getElementById("taskInput");
+const addTaskBtn = document.getElementById("addTaskBtn");
+const taskList = document.getElementById("taskList");
+
 function addTask() {
-  const input = document.getElementById('taskInput');
-  const taskList = document.getElementById('taskList');
+  const taskText = taskInput.value.trim();
+  if (taskText === "") return;
 
-  if (input.value.trim() === '') return;
+  const li = document.createElement("li");
+  li.textContent = taskText;
 
-  const li = document.createElement('li');
-  li.textContent = input.value;
-  li.onclick = () => li.remove(); // remove on click
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "Delete";
+  removeBtn.onclick = () => li.remove();
+
+  li.appendChild(removeBtn);
   taskList.appendChild(li);
 
-  input.value = '';
+  taskInput.value = "";
 }
+
+addTaskBtn.addEventListener("click", addTask);
+taskInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") addTask();
+});

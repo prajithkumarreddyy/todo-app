@@ -1,5 +1,6 @@
 name: Node.js CI
 
+# Trigger workflow on push or pull request to main branch
 on:
   push:
     branches: [ "main" ]
@@ -11,19 +12,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Step 3: Install dependencies including devDependencies
       - name: Install dependencies
         run: npm ci --include=dev
 
+      # Step 4: Ensure Jest is executable
       - name: Make Jest executable
         run: chmod +x ./node_modules/.bin/jest
 
+      # Step 5: Run tests with Jest
       - name: Run tests
         run: npx jest

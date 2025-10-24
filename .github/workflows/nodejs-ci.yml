@@ -25,11 +25,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Run tests
-      - name: Run Jest tests
-        run: npx jest --ci --coverage
+      # 4. Give Jest permission (optional but prevents Linux permission issues)
+      - name: Give Jest execute permission
+        run: chmod +x ./node_modules/.bin/jest
 
-      # 5. Deploy to GitHub Pages
+      # 5. Run tests
+      - name: Run tests
+        run: npm test
+
+      # 6. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

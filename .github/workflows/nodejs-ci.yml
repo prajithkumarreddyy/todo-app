@@ -1,35 +1,37 @@
-name: Node.js CI
+name: Node.js CI/CD
 
-# Trigger workflow on push or pull request to main branch
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
+      # 1. Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # Step 2: Setup Node.js environment
+      # 2. Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 22
 
-      # Step 3: Install dependencies including devDependencies
+      # 3. Install dependencies
       - name: Install dependencies
-        run: npm ci --include=dev
+        run: npm install
 
-      # Step 4: Ensure Jest is executable
-      - name: Make Jest executable
-        run: chmod +x ./node_modules/.bin/jest
+      # 4. Run tests
+      - name: Run Jest tests
+        run: npx jest --ci --coverage
 
-      # Step 5: Run tests with Jest
-      - name: Run tests
-        run: npx jest
+      # 5. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
